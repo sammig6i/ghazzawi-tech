@@ -35,7 +35,11 @@ const theme = createTheme({
     h3: {
       fontWeight: 800,
     },
+    h6: {
+      fontWeight: 700,
+    },
   },
+  
 });
 
 export default theme;

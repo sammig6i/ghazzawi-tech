@@ -7,8 +7,8 @@ import Header from '@/app/components/Header';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Blue Growth Advisors",
-  description: "Navigate the Blue Economy with Courage, Clarity, and Confidence",
+  title: "Ghazzawi Tech",
+  description: "Tech Solutions Made for You. By Us.",
 };
 
 export default function RootLayout({

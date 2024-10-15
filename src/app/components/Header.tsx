@@ -1,6 +1,7 @@
 'use client'
 import { AppBar, Toolbar, Button, Box, IconButton, Menu, MenuItem, Fade } from '@mui/material';
 import Image from 'next/image';
+import Link from 'next/link';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState, useEffect } from 'react';
@@ -9,21 +10,32 @@ const buttonStyle = {
   fontWeight: 600,
   minWidth: 'auto',
   px: { xs: 1, sm: 2 },
-  color: '#001233',
-  fontSize: '1.1rem', 
+  fontSize: '1.1rem',
   textTransform: 'none',
+  transition: 'background-color 0.3s, color 0.3s',
+};
+
+const connectButtonStyle = {
+  fontWeight: 600,
+  ml: { md: 2 },
+  backgroundColor: '#001233',
+  color: '#F9FAFB',
+  textTransform: 'uppercase',
+  fontSize: '1.1rem',
+  py: 1.5,
+  px: 3,
   '&:hover': {
-    backgroundColor: 'rgba(0, 18, 51, 0.05)',
-    color: '#001233',
+    backgroundColor: 'rgba(0, 18, 51, 0.9)',
   },
   '&:active': {
-    backgroundColor: 'rgba(0, 18, 51, 0.1)',
+    backgroundColor: 'rgba(0, 18, 51, 1)',
   },
-  transition: 'background-color 0.3s, color 0.3s',
+  transition: 'background-color 0.3s',
 };
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -35,59 +47,63 @@ export default function Header() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 900) { 
+      if (window.innerWidth >= 900) {
         handleClose();
       }
     };
 
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
     window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleScroll);
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   return (
-    <AppBar 
-      position="static" 
-      elevation={0} 
-      sx={{ 
-        backgroundColor: '#F9FAFB',
-        zIndex: (theme) => theme.zIndex.drawer + 1, // Ensure AppBar is above the Menu
+    <AppBar
+      position="fixed"
+      elevation={isScrolled ? 4 : 0}
+      sx={{
+        background: isScrolled
+          ? '#FFFFFF'
+          : 'linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%)',
+        transition: 'all 0.3s ease-in-out',
+        zIndex: (theme) => theme.zIndex.drawer + 1,
       }}
     >
       <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, sm: 4, md: 6 } }}>
-        <Image
-          src="/logo.svg"
-          alt="Blue Growth Advisors"
-          width={250}
-          height={100}
-          priority
-          style={{ position: 'relative', zIndex: 1302 }} // Ensure logo is above the Menu
-        />
+        <Link href="/" passHref>
+          <Image
+            src={isScrolled ? "/logo-dark.svg" : "/logo-light.svg"}
+            alt="Ghazzawi Tech"
+            width={250}
+            height={100}
+            priority
+            style={{ position: 'relative', zIndex: 1302, cursor: 'pointer' }}
+          />
+        </Link>
         <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: { md: 3 } }}>
-          <Button sx={buttonStyle} disableRipple>Services</Button>
-          <Button sx={buttonStyle} disableRipple>Posts</Button>
-          <Button sx={buttonStyle} disableRipple>About</Button>
-          <Button 
-            variant="contained" 
+          <Button sx={{...buttonStyle, color: isScrolled ? '#001233' : '#FFFFFF'}} disableRipple>About</Button>
+          <Button sx={{...buttonStyle, color: isScrolled ? '#001233' : '#FFFFFF'}} disableRipple>Services</Button>
+          <Button sx={{...buttonStyle, color: isScrolled ? '#001233' : '#FFFFFF'}} disableRipple>Work</Button>
+          <Button sx={{...buttonStyle, color: isScrolled ? '#001233' : '#FFFFFF'}} disableRipple>Posts</Button>
+          <Button
+            variant="contained"
             disableRipple
-            sx={{ 
-              fontWeight: 600,
-              ml: { md: 2 },
-              backgroundColor: '#001233',
-              color: '#F9FAFB',
-              textTransform: 'uppercase',
-              fontSize: '1.1rem',
-              py: 1.5,
-              px: 3,
-              '&:hover': {
-                backgroundColor: 'rgba(0, 18, 51, 0.9)',
-              },
-              '&:active': {
-                backgroundColor: 'rgba(0, 18, 51, 1)',
-              },
-              transition: 'background-color 0.3s',
+            sx={{
+              ...connectButtonStyle,
+              backgroundColor: isScrolled ? '#001233' : 'transparent',
+              border: isScrolled ? 'none' : '2px solid #FFFFFF',
             }}
           >
             Connect
@@ -99,13 +115,13 @@ export default function Header() {
           color="inherit"
           aria-label="menu"
           onClick={Boolean(anchorEl) ? handleClose : handleMenu}
-          sx={{ 
-            display: { xs: 'flex', md: 'none' }, 
-            color: '#001233',
+          sx={{
+            display: { xs: 'flex', md: 'none' },
+            color: isScrolled ? '#001233' : '#FFFFFF',
             position: 'relative',
-            zIndex: 1302, // Ensure IconButton is above the Menu
+            zIndex: 1302,
             '& .MuiSvgIcon-root': {
-              fontSize: '2rem', // Make the icon larger
+              fontSize: '2rem',
             },
           }}
         >
@@ -152,7 +168,7 @@ export default function Header() {
               opacity: 1,
               boxShadow: 'none',
               borderRadius: 0,
-              transition: 'opacity 300ms ease-in-out !important',
+              transition: 'opacity 300ms ease-in-out',
             },
             '& .MuiList-root': {
               height: '100%',
@@ -171,10 +187,23 @@ export default function Header() {
             },
           }}
         >
-          <MenuItem onClick={handleClose}>Services</MenuItem>
-          <MenuItem onClick={handleClose}>Posts</MenuItem>
-          <MenuItem onClick={handleClose}>About</MenuItem>
-          <MenuItem onClick={handleClose}>Connect</MenuItem>
+          <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>About</MenuItem>
+          <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Services</MenuItem>
+          <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Work</MenuItem>
+          <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Posts</MenuItem>
+          <Button
+            variant="contained"
+            disableRipple
+            sx={{
+              ...connectButtonStyle,
+              width: 'auto',
+              margin: '1rem auto',
+              fontSize: '1.5rem',
+            }}
+            onClick={handleClose}
+          >
+            Connect
+          </Button>
         </Menu>
       </Toolbar>
     </AppBar>
