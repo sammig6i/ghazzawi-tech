@@ -93,10 +93,10 @@ export default function Header() {
           />
         </Link>
         <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: { md: 3 } }}>
-          <Button sx={{...buttonStyle, color: isScrolled ? '#001233' : '#FFFFFF'}} disableRipple>About</Button>
-          <Button sx={{...buttonStyle, color: isScrolled ? '#001233' : '#FFFFFF'}} disableRipple>Services</Button>
-          <Button sx={{...buttonStyle, color: isScrolled ? '#001233' : '#FFFFFF'}} disableRipple>Work</Button>
-          <Button sx={{...buttonStyle, color: isScrolled ? '#001233' : '#FFFFFF'}} disableRipple>Posts</Button>
+          <Button sx={{ ...buttonStyle, color: isScrolled ? '#001233' : '#FFFFFF' }} disableRipple>About</Button>
+          <Button sx={{ ...buttonStyle, color: isScrolled ? '#001233' : '#FFFFFF' }} disableRipple>Services</Button>
+          <Button sx={{ ...buttonStyle, color: isScrolled ? '#001233' : '#FFFFFF' }} disableRipple>Work</Button>
+          <Button sx={{ ...buttonStyle, color: isScrolled ? '#001233' : '#FFFFFF' }} disableRipple>Posts</Button>
           <Button
             variant="contained"
             disableRipple
@@ -114,18 +114,18 @@ export default function Header() {
           edge="start"
           color="inherit"
           aria-label="menu"
-          onClick={Boolean(anchorEl) ? handleClose : handleMenu}
+          onClick={handleMenu}
           sx={{
             display: { xs: 'flex', md: 'none' },
             color: isScrolled ? '#001233' : '#FFFFFF',
             position: 'relative',
-            zIndex: 1302,
+            zIndex: 9999,
             '& .MuiSvgIcon-root': {
               fontSize: '2rem',
             },
           }}
         >
-          {Boolean(anchorEl) ? <CloseIcon /> : <MenuIcon />}
+          <MenuIcon />
         </IconButton>
         <Menu
           id="menu-appbar"
@@ -187,6 +187,26 @@ export default function Header() {
             },
           }}
         >
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={handleClose}
+            sx={{
+              display: { xs: 'flex', md: 'none' },
+              color: '#001233',
+              position: 'absolute',
+              top: { xs: 16, sm: 24 },
+              right: { xs: 16, sm: 32 },
+              zIndex: 9999,
+              '& .MuiSvgIcon-root': {
+                fontSize: '2rem',
+              },
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
           <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>About</MenuItem>
           <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Services</MenuItem>
           <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Work</MenuItem>
