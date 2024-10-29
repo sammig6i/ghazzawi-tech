@@ -142,6 +142,7 @@ export default function Header() {
           onClose={handleClose}
           TransitionComponent={Fade}
           TransitionProps={{ timeout: 300 }}
+          marginThreshold={0}
           sx={{
             '& .MuiMenu-paper': {
               width: '100vw',
