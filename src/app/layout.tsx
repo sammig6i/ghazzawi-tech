@@ -10,8 +10,6 @@ import './globals.css';
 export const metadata: Metadata = {
   title: "Ghazzawi Tech",
   description: "Tech Solutions Made for You. By Us.",
-
-
 };
 
 export default function RootLayout({
