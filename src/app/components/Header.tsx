@@ -112,7 +112,9 @@ export default function Header() {
         </Box>
         <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: { md: 3 } }}>
 
-          <Button sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }} disableRipple>About</Button>
+          <ScrollLink to="about" smooth={true} offset={-80} duration={500}>
+            <Button sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }} disableRipple>About</Button>
+          </ScrollLink>
 
           <ScrollLink to="services" smooth={true} offset={-80} duration={500}>
             <Button
@@ -123,7 +125,10 @@ export default function Header() {
             </Button>
           </ScrollLink>
 
-          <Button sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }} disableRipple>Our Work</Button>
+          <ScrollLink to="work" smooth={true} offset={-80} duration={500}>
+
+            <Button sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }} disableRipple>Work</Button>
+          </ScrollLink>
 
           <Button sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }} disableRipple>Blog</Button>
 
@@ -239,7 +244,10 @@ export default function Header() {
           >
             <CloseIcon />
           </IconButton>
-          <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>About</MenuItem>
+          <ScrollLink to="about" smooth={true} offset={-80} duration={500}>
+
+            <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>About</MenuItem>
+          </ScrollLink>
 
           <ScrollLink to="services" smooth={true} offset={-80} duration={500}>
             <MenuItem
@@ -251,7 +259,10 @@ export default function Header() {
             </MenuItem>
           </ScrollLink>
 
-          <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Our Work</MenuItem>
+          <ScrollLink to="work" smooth={true} offset={-80} duration={500}>
+            <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Work</MenuItem>
+          </ScrollLink>
+
           <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Blog</MenuItem>
           <Button
             variant="contained"

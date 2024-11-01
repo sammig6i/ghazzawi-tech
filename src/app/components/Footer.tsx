@@ -121,8 +121,9 @@ export default function Footer() {
             >
               About
             </ScrollLink>
+
             <ScrollLink
-              to="hero"
+              to="services"
               smooth={true}
               offset={-80}
               duration={500}
@@ -144,7 +145,7 @@ export default function Footer() {
             </ScrollLink>
 
             <ScrollLink
-              to="hero"
+              to="work"
               smooth={true}
               offset={-80}
               duration={500}
@@ -156,13 +157,13 @@ export default function Footer() {
                 padding: '0.4rem',
                 display: 'block',
                 transition: 'opacity 0.3s ease',
-                opacity: hoveredLink !== null ? (hoveredLink === 'our work' ? 1 : 0.3) : 1,
+                opacity: hoveredLink !== null ? (hoveredLink === 'work' ? 1 : 0.3) : 1,
                 cursor: 'pointer'
               }}
-              onMouseEnter={() => setHoveredLink('our work')}
+              onMouseEnter={() => setHoveredLink('work')}
               onMouseLeave={() => setHoveredLink(null)}
             >
-              Our Work
+              Work
             </ScrollLink>
 
             <ScrollLink

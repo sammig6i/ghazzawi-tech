@@ -1,17 +1,22 @@
-'use client';
+"use client";
 
-import { createTheme } from '@mui/material/styles';
-import { Raleway } from 'next/font/google';
-import colors from 'tailwindcss/colors';
+import { createTheme } from "@mui/material/styles";
+import { Raleway, Unbounded } from "next/font/google";
+import colors from "tailwindcss/colors";
 
 export const raleway = Raleway({
-  subsets: ['latin'],
-  weight: ['400', '700', '800'],
+  subsets: ["latin"],
+  weight: ["400", "700", "800"],
+});
+
+export const unbounded = Unbounded({
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 const theme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
     primary: {
       main: colors.blue[500],
     },
@@ -39,7 +44,17 @@ const theme = createTheme({
       fontWeight: 700,
     },
   },
-  
+  components: {
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          "&.numbers": {
+            fontFamily: unbounded.style.fontFamily,
+          },
+        },
+      },
+    },
+  },
 });
 
 export default theme;
