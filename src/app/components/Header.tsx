@@ -38,6 +38,7 @@ const connectButtonStyle = {
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isLight, setIsLight] = useState(false);
+    const [isNavigating, setIsNavigating] = useState(false);
   const pathname = usePathname();
 
     const handleNavigation = async (section: string): Promise<boolean> => {
