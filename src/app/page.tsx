@@ -333,25 +333,28 @@ export default async function Home() {
           <Box sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-            gap: 6,
-            alignItems: 'center'
+            gap: { xs: 4, md: 8 },
+            mb: 6
           }}>
+            {/* Image Container */}
             <Box sx={{
               position: 'relative',
-              borderRadius: '30px',
-              overflow: 'hidden',
-              height: '600px'
+              width: '100%',
+              height: { xs: '400px', sm: '500px', md: '600px' }, // Responsive height
+              borderRadius: '16px',
+              overflow: 'hidden'
             }}>
               <Image
                 src="/about-photo.png"
                 alt="Team Member"
                 fill
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 40vw"
                 style={{
                   objectFit: 'cover',
                   objectPosition: 'center',
                 }}
                 quality={100}
+                priority // Add priority for above-the-fold images
               />
               <Box
                 sx={{
@@ -359,7 +362,7 @@ export default async function Home() {
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  padding: '40px',
+                  padding: { xs: '20px', sm: '30px', md: '40px' }, // Responsive padding
                   background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 50%, rgba(0,0,0,0) 100%)',
                   display: 'flex',
                   flexDirection: 'column',
