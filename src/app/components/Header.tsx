@@ -3,8 +3,7 @@ import { AppBar, Toolbar, Button, Box, IconButton, Menu, MenuItem, Fade } from '
 import Image from 'next/image';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState, useEffect, useLayoutEffect, useCallback } from 'react';
-import { Link as ScrollLink, scroller } from 'react-scroll';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 
@@ -114,7 +113,7 @@ export default function Header() {
     >
       <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, sm: 4, md: 6 } }}>
         <Box component="div" sx={{ cursor: 'pointer' }}>
-          <ScrollLink to="hero" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('hero')}>
+          <Link href="/">
             <Image
               src={isLight ? "/logo-dark.svg" : "/logo-light.svg"}
               alt="Ghazzawi Tech"
@@ -123,32 +122,31 @@ export default function Header() {
               priority
               style={{ position: 'relative', zIndex: 1302 }}
             />
-          </ScrollLink>
+          </Link>
         </Box>
         <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: { md: 3 } }}>
-          <ScrollLink to="work" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('work')}>
+          <Link href="/work">
             <Button sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }} disableRipple>Work</Button>
-          </ScrollLink>
+          </Link>
 
-          <ScrollLink to="services" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('services')}>
+          <Link href="/services">
             <Button
               sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }}
               disableRipple
             >
               Services
             </Button>
-          </ScrollLink>
+          </Link>
 
-          <ScrollLink to="about" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('about')}>
+          <Link href="/about">
             <Button sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }} disableRipple>About</Button>
-          </ScrollLink>
-
+          </Link>
 
           <Link href="/blog">
             <Button sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }} disableRipple>Blog</Button>
           </Link>
 
-          <ScrollLink to="contact" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('contact')}>
+          <Link href="/contact">
             <Button
               variant="contained"
               disableRipple
@@ -160,7 +158,7 @@ export default function Header() {
             >
               Connect
             </Button>
-          </ScrollLink>
+          </Link>
 
         </Box>
         <IconButton
@@ -262,23 +260,23 @@ export default function Header() {
           >
             <CloseIcon />
           </IconButton>
-          <ScrollLink to="work" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('work')}>
+          <Link href="/work">
             <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Work</MenuItem>
-          </ScrollLink>
+          </Link>
 
-          <ScrollLink to="services" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('services')}>
+          <Link href="/services">
             <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Services</MenuItem>
-          </ScrollLink>
+          </Link>
 
-          <ScrollLink to="about" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('about')}>
+          <Link href="/about">
             <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>About</MenuItem>
-          </ScrollLink>
+          </Link>
 
           <Link href="/blog">
             <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Blog</MenuItem>
           </Link>
 
-          <ScrollLink to="contact" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('contact')}>
+          <Link href="/contact">
             <Button
               variant="contained"
               disableRipple
@@ -292,7 +290,7 @@ export default function Header() {
             >
               Connect
             </Button>
-          </ScrollLink>
+          </Link>
 
         </Menu>
       </Toolbar>

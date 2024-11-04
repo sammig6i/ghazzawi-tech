@@ -2,39 +2,68 @@ import { client } from '../../../../sanity/lib/client';
 import { urlFor } from '../../../../sanity/lib/image';
 import { Box, Container, Typography, Button } from '@mui/material';
 import Image from 'next/image';
-import { PortableText } from '@portabletext/react';
+import ReactMarkdown from 'react-markdown';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Link from 'next/link';
+import 'easymde/dist/easymde.min.css';
 
-function calculateReadingTime(body: any[]): number {
-  const WORDS_PER_MINUTE = 200;
-  const wordCount = body.reduce((count, block) => {
-    if (block._type === 'block') {
-      return count + (block.children?.reduce((acc: number, child: any) => {
-        return acc + (child.text?.split(/\s+/).length || 0);
-      }, 0) || 0);
-    }
-    return count;
-  }, 0);
-  return Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
+interface BlockChild {
+  _type: string;
+  text?: string;
 }
 
+interface Block {
+  _type: string;
+  children?: BlockChild[];
+}
+
+function calculateReadingTime(body: string | Block[]): number {
+  const WORDS_PER_MINUTE = 200;
+
+  if (typeof body === 'string') {
+    const wordCount = body.trim().split(/\s+/).length;
+    return Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
+  }
+
+  if (Array.isArray(body)) {
+    const wordCount = body.reduce((count, block) => {
+      if (block._type === 'block') {
+        return count + (block.children?.reduce((acc: number, child: BlockChild) => {
+          return acc + (child.text?.split(/\s+/).length || 0);
+        }, 0) || 0);
+      }
+      return count;
+    }, 0);
+    return Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
+  }
+
+  return 1;
+}
+
+const MdxImage = ({ src, alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => {
+  if (!src) return null;
+
+  const width = props.width ? Number(props.width) : undefined;
+  const height = props.height ? Number(props.height) : undefined;
+
+  return (
+    <Box sx={{ my: 4, position: 'relative', height: '400px' }}>
+      <Image
+        src={src}
+        alt={alt || ''}
+        fill
+        style={{ objectFit: 'cover' }}
+        sizes="(max-width: 800px) 100vw, 800px"
+        {...props}
+        width={width}
+        height={height}
+      />
+    </Box>
+  );
+};
+
 const components = {
-  types: {
-    image: ({ value }: any) => {
-      return (
-        <Box sx={{ my: 4, position: 'relative', height: '400px' }}>
-          <Image
-            src={urlFor(value).url()}
-            alt={value.alt || ''}
-            fill
-            style={{ objectFit: 'cover' }}
-            sizes="(max-width: 800px) 100vw, 800px"
-          />
-        </Box>
-      );
-    },
-  },
+  img: MdxImage,
 };
 
 export default async function BlogPost({ params }: { params: { slug: string } }) {
@@ -143,9 +172,15 @@ export default async function BlogPost({ params }: { params: { slug: string } })
               fontWeight: 'bold',
               mt: 5,
               mb: 3
+            },
+            '& img': {
+              maxWidth: '100%',
+              height: 'auto',
+              borderRadius: '8px',
+              my: 4
             }
           }}>
-            <PortableText value={post.body} components={components} />
+            <ReactMarkdown components={components}>{post.body}</ReactMarkdown>
           </Box>
 
           {/* Back Button */}

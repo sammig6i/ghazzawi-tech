@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Typography, Container, Box, Button } from "@mui/material";
+import { Typography, Container, Box } from "@mui/material";
 import NavigationButton from '@/app/components/NavigationButton';
 import CaseStudyCard from '@/app/components/CaseStudyCard';
 import ContactForm from '@/app/components/ContactForm';
@@ -522,7 +522,7 @@ export default async function Home() {
               fontSize: { xs: '2rem', md: '2.5rem' },
             }}
           >
-            Let's Talk!
+            Let&apos;s Talk!
           </Typography>
 
           <Box sx={{

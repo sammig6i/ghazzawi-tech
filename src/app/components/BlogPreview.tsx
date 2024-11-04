@@ -3,17 +3,33 @@ import { Box, Typography, Button, Avatar } from '@mui/material';
 import { urlFor } from '../../../sanity/lib/image';
 import Link from 'next/link';
 
+interface SanityImage {
+  _type: 'image';
+  asset: {
+    _ref: string;
+    _type: 'reference';
+  };
+}
+
+interface SanityBlock {
+  _type: 'block';
+  children?: {
+    text?: string;
+    _type: string;
+  }[];
+}
+
 interface BlogPreviewProps {
   posts: {
     title: string;
     subtitle: string;
     slug: string;
-    mainImage: any;
+    mainImage: SanityImage;
     publishedAt: string;
-    body: any[];
+    body: SanityBlock[];
     author: {
       name: string;
-      image: any;
+      image: SanityImage;
     };
     categories: {
       title: string;
@@ -21,20 +37,18 @@ interface BlogPreviewProps {
   }[];
 }
 
-function calculateReadingTime(body: string | any[]): number {
+function calculateReadingTime(body: string | SanityBlock[]): number {
   const WORDS_PER_MINUTE = 200;
 
-  // If body is a string (markdown), count words directly
   if (typeof body === 'string') {
     const wordCount = body.trim().split(/\s+/).length;
     return Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
   }
 
-  // If body is an array (legacy portable text), use the existing logic
   if (Array.isArray(body)) {
     const wordCount = body.reduce((count, block) => {
       if (block._type === 'block') {
-        return count + (block.children?.reduce((acc: number, child: any) => {
+        return count + (block.children?.reduce((acc: number, child) => {
           return acc + (child.text?.split(/\s+/).length || 0);
         }, 0) || 0);
       }
@@ -43,14 +57,13 @@ function calculateReadingTime(body: string | any[]): number {
     return Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
   }
 
-  // Default fallback
   return 1;
 }
 
 export default function BlogPreview({ posts }: BlogPreviewProps) {
   return (
     <Box>
-      <Box sx={{ 
+      <Box sx={{
         display: 'grid',
         gridTemplateColumns: {
           xs: '1fr',

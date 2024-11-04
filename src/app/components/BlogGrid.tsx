@@ -2,18 +2,29 @@ import Image from 'next/image';
 import { Box, Typography, Avatar } from '@mui/material';
 import { urlFor } from '../../../sanity/lib/image';
 import Link from 'next/link';
+import { SanityImageSource } from '@sanity/image-url/lib/types/types';
+
+interface BlockChild {
+  _type: string;
+  text?: string;
+}
+
+interface BlockContent {
+  _type: string;
+  children?: BlockChild[];
+}
 
 interface BlogGridProps {
   posts: {
     title: string;
     subtitle: string;
     slug: string;
-    mainImage: any;
+    mainImage: SanityImageSource;
     publishedAt: string;
-    body: any[];
+    body: BlockContent[];
     author: {
       name: string;
-      image: any;
+      image: SanityImageSource;
     };
     categories: {
       title: string;
@@ -21,7 +32,7 @@ interface BlogGridProps {
   }[];
 }
 
-function calculateReadingTime(body: string | any[]): number {
+function calculateReadingTime(body: string | BlockContent[]): number {
   const WORDS_PER_MINUTE = 200;
 
   // If body is a string (markdown), count words directly
@@ -34,7 +45,7 @@ function calculateReadingTime(body: string | any[]): number {
   if (Array.isArray(body)) {
     const wordCount = body.reduce((count, block) => {
       if (block._type === 'block') {
-        return count + (block.children?.reduce((acc: number, child: any) => {
+        return count + (block.children?.reduce((acc: number, child: BlockChild) => {
           return acc + (child.text?.split(/\s+/).length || 0);
         }, 0) || 0);
       }
