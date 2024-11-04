@@ -6,7 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
+import { Link as ScrollLink } from 'react-scroll';
 
 const buttonStyle = {
   fontWeight: 600,
@@ -39,6 +39,23 @@ export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isLight, setIsLight] = useState(false);
   const pathname = usePathname();
+
+    const handleNavigation = async (section: string): Promise<boolean> => {
+    if (isNavigating) return false;
+    setIsNavigating(true);
+
+    try {
+      if (pathname === '/') {
+        window.history.pushState({}, '', `/#${section}`);
+        return true;
+      }
+
+      router.push(`/#${section}`);
+      return true;
+    } finally {
+      setIsNavigating(false);
+    }
+  };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -104,6 +121,7 @@ export default function Header() {
           </Link>
         </Box>
         <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: { md: 3 } }}>
+          
           <Link href="/work">
             <Button sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }} disableRipple>Work</Button>
           </Link>
@@ -239,9 +257,14 @@ export default function Header() {
           >
             <CloseIcon />
           </IconButton>
-          <Link href="/work">
-            <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Work</MenuItem>
-          </Link>
+          
+          <ScrollLink  to="work"
+              smooth={true}
+              offset={-80}
+              duration={500}
+              onClick={() => handleNavigation('work')}>
+          <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Work</MenuItem>
+           </ScrollLink> 
 
           <Link href="/services">
             <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Services</MenuItem>
