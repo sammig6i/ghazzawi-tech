@@ -325,7 +325,7 @@ export default async function Home() {
                 },
               }}
             >
-              We build <span className="highlight">software that matters</span>. Ghazzawi Tech delivers clean, powerful solutions for businesses that need results. No fluff. No jargon. Just <span className="highlight">technology that works</span>. We are focused on one thing: <span className="highlight">turning your digital challenges into victories</span>. Our code runs deep. Our solutions run deeper. From custom software to data engineering, we <span className="highlight">build what others can't</span>. Simple. Direct. Effective.
+              We build <span className="highlight">software that matters</span>. Ghazzawi Tech delivers clean, powerful solutions for businesses that need results. No fluff. No jargon. Just <span className="highlight">technology that works</span>. We are focused on one thing: <span className="highlight">turning your digital challenges into victories</span>. Our code runs deep. Our solutions run deeper. From custom software to data engineering, we <span className="highlight">build what others can&apos;t</span>. Simple. Direct. Effective.
             </Typography>
           </Box>
 
@@ -413,7 +413,7 @@ export default async function Home() {
                   lineHeight: 1.8,
                 }}
               >
-                Sammi, the driving force behind Ghazzawi Tech. With a deep understanding of software development and a passion for innovation, Sammi's dedication to client success drives our company's vision. His strategic approach to technology solutions and commitment to excellence sets the foundation for our work. As a hands-on leader, Sammi ensures every project delivers measurable value and exceeds client expectations.
+                Sammi, the driving force behind Ghazzawi Tech. With a deep understanding of software development and a passion for innovation, Sammi&apos;s dedication to client success drives our company&apos;s vision. His strategic approach to technology solutions and commitment to excellence sets the foundation for our work. As a hands-on leader, Sammi ensures every project delivers measurable value and exceeds client expectations.
               </Typography>
 
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 4 }}>
