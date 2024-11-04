@@ -83,25 +83,6 @@ export default function Header() {
     }
   }, [pathname, checkScrollPosition]);
 
-  const handleNavigation = async (section: string): Promise<boolean> => {
-    if (isNavigating) return false;
-    setIsNavigating(true);
-    handleClose();
-
-    try {
-      if (pathname === '/') {
-        window.history.pushState({}, '', `/#${section}`);
-        return true;
-      }
-
-
-      router.push(`/#${section}`);
-      return true;
-    } finally {
-      setIsNavigating(false);
-    }
-  };
-
   return (
     <AppBar
       position="fixed"
