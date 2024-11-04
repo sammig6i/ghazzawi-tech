@@ -40,6 +40,7 @@ export default function Header() {
   const [isLight, setIsLight] = useState(false);
     const [isNavigating, setIsNavigating] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
     const handleNavigation = async (section: string): Promise<boolean> => {
     if (isNavigating) return false;
