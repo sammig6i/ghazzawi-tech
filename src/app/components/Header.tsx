@@ -268,20 +268,34 @@ export default function Header() {
           <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Work</MenuItem>
            </ScrollLink> 
 
-          <Link href="/services">
-            <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Services</MenuItem>
-          </Link>
+                    <ScrollLink  to="services"
+              smooth={true}
+              offset={-80}
+              duration={500}
+              onClick={() => handleNavigation('services')}>
+          <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Services</MenuItem>
+           </ScrollLink> 
 
-          <Link href="/about">
-            <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>About</MenuItem>
-          </Link>
+                    <ScrollLink  to="about"
+              smooth={true}
+              offset={-80}
+              duration={500}
+              onClick={() => handleNavigation('about')}>
+          <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>About</MenuItem>
+           </ScrollLink> 
 
           <Link href="/blog">
             <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Blog</MenuItem>
           </Link>
 
-          <Link href="/contact">
-            <Button
+
+                    <ScrollLink  to="contact"
+              smooth={true}
+              offset={-80}
+              duration={500}
+              onClick={() => handleNavigation('contact')}>
+
+                     <Button
               variant="contained"
               disableRipple
               sx={{
@@ -294,7 +308,7 @@ export default function Header() {
             >
               Connect
             </Button>
-          </Link>
+           </ScrollLink> 
 
         </Menu>
       </Toolbar>
