@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import { styled } from '@mui/material/styles';
 
@@ -39,9 +39,12 @@ export default function CaseStudyCard({
     <Box
       sx={{
         position: 'relative',
-        mt: isOffset ? { xs: 0, md: 12 } : 0,
-        height: 'min-content',
+        mt: isOffset ? { xs: 0, md: 8 } : 0,
+        height: 'auto',
         cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column',
+        maxHeight: '100vh',
         '&:hover': {
           '& .content-box': {
             borderColor: 'rgba(0, 0, 0, 0.5)',
@@ -50,7 +53,7 @@ export default function CaseStudyCard({
             transform: 'scale(1.05)',
           },
           '& .image-box, & .content-box': {
-            boxShadow: '0 15px 35px rgba(0, 0, 0, 0.15)',
+            boxShadow: '0 12px 25px rgba(0, 0, 0, 0.15)',
           }
         },
       }}
@@ -60,12 +63,12 @@ export default function CaseStudyCard({
         className="image-box"
         sx={{
           position: 'relative',
-          borderRadius: '30px',
+          borderRadius: '20px',
           overflow: 'hidden',
           backgroundColor: '#f3f4f6',
-          height: '500px',
+          height: { xs: '250px', sm: '350px', md: '400px' },
           width: '100%',
-          boxShadow: '0 8px 30px rgba(0, 0, 0, 0.12)',
+          boxShadow: '0 6px 20px rgba(0, 0, 0, 0.12)',
           transition: 'box-shadow 0.3s ease-in-out',
         }}
       >
@@ -77,6 +80,7 @@ export default function CaseStudyCard({
               alt={title}
               fill
               style={{
+                objectFit: 'cover',
                 objectPosition: 'center',
                 transition: 'transform 0.4s ease-in-out',
               }}
@@ -96,7 +100,7 @@ export default function CaseStudyCard({
                   zIndex: 1,
                 }}
               >
-                <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'white' }}>
+                <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'white', fontSize: '1.5rem' }}>
                   Coming Soon
                 </Typography>
               </Box>
@@ -113,7 +117,7 @@ export default function CaseStudyCard({
               color: 'white',
             }}
           >
-            <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: '1.25rem' }}>
               {title}
             </Typography>
           </Box>
@@ -127,19 +131,19 @@ export default function CaseStudyCard({
           position: 'relative',
           mt: 2,
           backgroundColor: '#DBDBDB',
-          borderRadius: '30px',
-          p: 4,
+          borderRadius: '20px',
+          p: { xs: 1.5, sm: 2, md: 2.5 },
           border: '1px solid transparent',
           transition: 'border 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-          boxShadow: '0 8px 30px rgba(0, 0, 0, 0.12)',
+          boxShadow: '0 6px 20px rgba(0, 0, 0, 0.12)',
         }}
       >
-        <LabelBox>
+        <LabelBox sx={{ mb: { xs: 1, sm: 1.5, md: 2 } }}>
           <Typography
             variant="overline"
             sx={{
               color: 'white',
-              fontSize: '0.75rem',
+              fontSize: { xs: '0.55rem', sm: '0.6rem', md: '0.65rem' },
               fontWeight: 900,
               letterSpacing: '0.1em',
             }}
@@ -148,22 +152,24 @@ export default function CaseStudyCard({
           </Typography>
         </LabelBox>
         <Typography
-          variant="h5"
+          variant="h6"
           sx={{
             fontWeight: 'bold',
-            mb: 1,
+            mb: 0.5,
             color: 'black',
+            fontSize: { xs: '0.9rem', sm: '1rem', md: '1.125rem' },
           }}
         >
           {title}
         </Typography>
         {subtitle && (
           <Typography
-            variant="body1"
+            variant="body2"
             sx={{
               opacity: 0.9,
               color: 'black',
-              mb: 5,
+              mb: 4,
+              fontSize: { xs: '0.75rem', sm: '0.8rem', md: '1rem' },
             }}
           >
             {subtitle}
@@ -175,28 +181,28 @@ export default function CaseStudyCard({
             sx={{
               display: 'flex',
               justifyContent: 'flex-start',
-              gap: 8,
+              gap: { xs: 1.5, sm: 2, md: 3 },
             }}
           >
             {stats.map((stat, index) => (
               <Box key={index}>
                 <Typography
-                  variant="h2"
+                  variant="h3"
                   className="numbers"
                   sx={{
                     fontWeight: 'bold',
                     color: 'black',
-                    fontSize: '3.5rem',
+                    fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
                     lineHeight: 1,
                   }}
                 >
                   {stat.value}
                 </Typography>
                 <Typography
-                  variant="h6"
+                  variant="subtitle1"
                   sx={{
                     color: 'black',
-                    fontSize: '1.125rem',
+                    fontSize: { xs: '0.75rem', sm: '0.8rem', md: '1rem' },
                   }}
                 >
                   {stat.label}

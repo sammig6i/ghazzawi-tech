@@ -1,11 +1,12 @@
 'use client'
 import { AppBar, Toolbar, Button, Box, IconButton, Menu, MenuItem, Fade } from '@mui/material';
 import Image from 'next/image';
-import Link from 'next/link';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState, useEffect, useLayoutEffect } from 'react';
-import { Link as ScrollLink } from 'react-scroll';
+import { useState, useEffect, useLayoutEffect, useCallback } from 'react';
+import { Link as ScrollLink, scroller } from 'react-scroll';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 
 
 const buttonStyle = {
@@ -38,7 +39,9 @@ const connectButtonStyle = {
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isLight, setIsLight] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -48,58 +51,70 @@ export default function Header() {
     setAnchorEl(null);
   };
 
-  const checkScrollPosition = () => {
-    const heroSection = document.getElementById('hero');
-    if (heroSection) {
-      const rect = heroSection.getBoundingClientRect();
-      const threshold = window.innerHeight * 0.9;
-      setIsLight(rect.bottom <= threshold);
+  const checkScrollPosition = useCallback(() => {
+    if (pathname !== '/') {
+      setIsLight(true);
+      return;
     }
-  };
 
-  useLayoutEffect(() => {
-    checkScrollPosition();
-    setIsLoaded(true);
-  }, []);
+    const heroSection = document.getElementById('hero');
+    if (!heroSection) {
+      setIsLight(true);
+      return;
+    }
+
+    const rect = heroSection.getBoundingClientRect();
+    const threshold = window.innerHeight * 0.9;
+    setIsLight(rect.bottom <= threshold);
+  }, [pathname]);
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 900) {
-        handleClose();
+    checkScrollPosition();
+  }, [pathname, checkScrollPosition]);
+
+  useEffect(() => {
+    if (pathname === '/') {
+      window.addEventListener('scroll', checkScrollPosition);
+      window.addEventListener('resize', checkScrollPosition);
+
+      return () => {
+        window.removeEventListener('scroll', checkScrollPosition);
+        window.removeEventListener('resize', checkScrollPosition);
+      };
+    }
+  }, [pathname, checkScrollPosition]);
+
+  const handleNavigation = async (section: string): Promise<boolean> => {
+    if (isNavigating) return false;
+    setIsNavigating(true);
+    handleClose();
+
+    try {
+      if (pathname === '/') {
+        window.history.pushState({}, '', `/#${section}`);
+        return true;
       }
-      checkScrollPosition();
-    };
 
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', checkScrollPosition);
 
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', checkScrollPosition);
-    };
-  }, []);
-
-  if (!isLoaded) {
-    return null;
-  }
+      router.push(`/#${section}`);
+      return true;
+    } finally {
+      setIsNavigating(false);
+    }
+  };
 
   return (
     <AppBar
       position="fixed"
-      elevation={isLight ? 4 : 0}
+      elevation={isLight ? 1 : 0}
       sx={{
-        background: isLight
-          ? '#FFFFFF'
-          : 'linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%)',
-        transition: 'all 0.2s ease-in-out',
-        zIndex: (theme) => theme.zIndex.drawer + 1,
-        opacity: isLoaded ? 1 : 0,
-        visibility: isLoaded ? 'visible' : 'hidden',
+        backgroundColor: isLight ? '#FFFFFF' : 'transparent',
+        transition: 'background-color 0.3s ease-in-out',
       }}
     >
       <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, sm: 4, md: 6 } }}>
         <Box component="div" sx={{ cursor: 'pointer' }}>
-          <ScrollLink to="hero" smooth={true} offset={-80} duration={500}>
+          <ScrollLink to="hero" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('hero')}>
             <Image
               src={isLight ? "/logo-dark.svg" : "/logo-light.svg"}
               alt="Ghazzawi Tech"
@@ -111,12 +126,11 @@ export default function Header() {
           </ScrollLink>
         </Box>
         <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: { md: 3 } }}>
-
-          <ScrollLink to="about" smooth={true} offset={-80} duration={500}>
-            <Button sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }} disableRipple>About</Button>
+          <ScrollLink to="work" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('work')}>
+            <Button sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }} disableRipple>Work</Button>
           </ScrollLink>
 
-          <ScrollLink to="services" smooth={true} offset={-80} duration={500}>
+          <ScrollLink to="services" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('services')}>
             <Button
               sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }}
               disableRipple
@@ -125,24 +139,28 @@ export default function Header() {
             </Button>
           </ScrollLink>
 
-          <ScrollLink to="work" smooth={true} offset={-80} duration={500}>
-
-            <Button sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }} disableRipple>Work</Button>
+          <ScrollLink to="about" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('about')}>
+            <Button sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }} disableRipple>About</Button>
           </ScrollLink>
 
-          <Button sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }} disableRipple>Blog</Button>
 
-          <Button
-            variant="contained"
-            disableRipple
-            sx={{
-              ...connectButtonStyle,
-              backgroundColor: isLight ? '#001233' : 'transparent',
-              border: isLight ? 'none' : '2px solid #FFFFFF',
-            }}
-          >
-            Connect
-          </Button>
+          <Link href="/blog">
+            <Button sx={{ ...buttonStyle, color: isLight ? '#001233' : '#FFFFFF' }} disableRipple>Blog</Button>
+          </Link>
+
+          <ScrollLink to="contact" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('contact')}>
+            <Button
+              variant="contained"
+              disableRipple
+              sx={{
+                ...connectButtonStyle,
+                backgroundColor: isLight ? '#001233' : 'transparent',
+                border: isLight ? 'none' : '2px solid #FFFFFF',
+              }}
+            >
+              Connect
+            </Button>
+          </ScrollLink>
 
         </Box>
         <IconButton
@@ -244,41 +262,40 @@ export default function Header() {
           >
             <CloseIcon />
           </IconButton>
-          <ScrollLink to="about" smooth={true} offset={-80} duration={500}>
-
-            <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>About</MenuItem>
-          </ScrollLink>
-
-          <ScrollLink to="services" smooth={true} offset={-80} duration={500}>
-            <MenuItem
-              sx={buttonStyle}
-              disableRipple
-              onClick={handleClose}
-            >
-              Services
-            </MenuItem>
-          </ScrollLink>
-
-          <ScrollLink to="work" smooth={true} offset={-80} duration={500}>
+          <ScrollLink to="work" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('work')}>
             <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Work</MenuItem>
           </ScrollLink>
 
-          <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Blog</MenuItem>
-          <Button
-            variant="contained"
-            disableRipple
-            sx={{
-              ...connectButtonStyle,
-              width: 'auto',
-              margin: '1rem auto',
-              fontSize: '1.5rem',
-            }}
-            onClick={handleClose}
-          >
-            Connect
-          </Button>
+          <ScrollLink to="services" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('services')}>
+            <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Services</MenuItem>
+          </ScrollLink>
+
+          <ScrollLink to="about" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('about')}>
+            <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>About</MenuItem>
+          </ScrollLink>
+
+          <Link href="/blog">
+            <MenuItem sx={buttonStyle} disableRipple onClick={handleClose}>Blog</MenuItem>
+          </Link>
+
+          <ScrollLink to="contact" smooth={true} offset={-80} duration={500} onClick={() => handleNavigation('contact')}>
+            <Button
+              variant="contained"
+              disableRipple
+              sx={{
+                ...connectButtonStyle,
+                width: 'auto',
+                margin: '1rem auto',
+                fontSize: '1.5rem',
+              }}
+              onClick={handleClose}
+            >
+              Connect
+            </Button>
+          </ScrollLink>
+
         </Menu>
       </Toolbar>
-    </AppBar>
+    </AppBar >
   );
 }

@@ -9,22 +9,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import { Link as ScrollLink } from 'react-scroll';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
-
-const FooterLink = styled(Link, {
-  shouldForwardProp: prop => prop !== 'isHovered' && prop !== 'isActive'
-})<{ isHovered: boolean; isActive: boolean }>(({ isHovered, isActive }) => ({
-  color: 'white',
-  textDecoration: 'none',
-  fontSize: '1.5rem',
-  fontWeight: 700,
-  padding: '0.4rem',
-  display: 'block',
-  transition: 'opacity 0.3s ease',
-  opacity: isHovered ? (isActive ? 1 : 0.3) : 1,
-  '&:hover': {
-    opacity: 1
-  }
-}));
+import { useRouter, usePathname } from 'next/navigation';
 
 const SocialIconButton = styled(IconButton, {
   shouldForwardProp: prop => prop !== 'isHovered' && prop !== 'isActive'
@@ -41,6 +26,26 @@ const SocialIconButton = styled(IconButton, {
 export default function Footer() {
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
+  const [isNavigating, setIsNavigating] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const handleNavigation = async (section: string): Promise<boolean> => {
+    if (isNavigating) return false;
+    setIsNavigating(true);
+
+    try {
+      if (pathname === '/') {
+        window.history.pushState({}, '', `/#${section}`);
+        return true;
+      }
+
+      router.push(`/#${section}`);
+      return true;
+    } finally {
+      setIsNavigating(false);
+    }
+  };
 
   return (
     <Box sx={{ backgroundColor: 'rgba(0, 18, 51, 1.0)', py: 6 }}>
@@ -71,7 +76,7 @@ export default function Footer() {
               md: 'flex-start'
             },
           }}>
-            <ScrollLink to="hero" smooth={true} offset={-80} duration={500}>
+            <Link href="/">
               <Image
                 src="/logo-light.svg"
                 alt="Ghazzawi Tech"
@@ -79,7 +84,7 @@ export default function Footer() {
                 height={100}
                 style={{ cursor: 'pointer' }}
               />
-            </ScrollLink>
+            </Link>
           </Box>
 
 
@@ -100,55 +105,13 @@ export default function Footer() {
             width: 'fit-content',
             mb: { xs: 4, md: 0 }
           }}>
-            <ScrollLink
-              to="hero"
-              smooth={true}
-              offset={-80}
-              duration={500}
-              style={{
-                color: 'white',
-                textDecoration: 'none',
-                fontSize: '1.5rem',
-                fontWeight: 700,
-                padding: '0.4rem',
-                display: 'block',
-                transition: 'opacity 0.3s ease',
-                opacity: hoveredLink !== null ? (hoveredLink === 'about' ? 1 : 0.3) : 1,
-                cursor: 'pointer'
-              }}
-              onMouseEnter={() => setHoveredLink('about')}
-              onMouseLeave={() => setHoveredLink(null)}
-            >
-              About
-            </ScrollLink>
-
-            <ScrollLink
-              to="services"
-              smooth={true}
-              offset={-80}
-              duration={500}
-              style={{
-                color: 'white',
-                textDecoration: 'none',
-                fontSize: '1.5rem',
-                fontWeight: 700,
-                padding: '0.4rem',
-                display: 'block',
-                transition: 'opacity 0.3s ease',
-                opacity: hoveredLink !== null ? (hoveredLink === 'services' ? 1 : 0.3) : 1,
-                cursor: 'pointer'
-              }}
-              onMouseEnter={() => setHoveredLink('services')}
-              onMouseLeave={() => setHoveredLink(null)}
-            >
-              Services
-            </ScrollLink>
 
             <ScrollLink
               to="work"
               smooth={true}
               offset={-80}
               duration={500}
+              onClick={() => handleNavigation('work')}
               style={{
                 color: 'white',
                 textDecoration: 'none',
@@ -167,10 +130,54 @@ export default function Footer() {
             </ScrollLink>
 
             <ScrollLink
-              to="hero"
+              to="services"
               smooth={true}
               offset={-80}
               duration={500}
+              onClick={() => handleNavigation('services')}
+              style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: '1.5rem',
+                fontWeight: 700,
+                padding: '0.4rem',
+                display: 'block',
+                transition: 'opacity 0.3s ease',
+                opacity: hoveredLink !== null ? (hoveredLink === 'services' ? 1 : 0.3) : 1,
+                cursor: 'pointer'
+              }}
+              onMouseEnter={() => setHoveredLink('services')}
+              onMouseLeave={() => setHoveredLink(null)}
+            >
+              Services
+            </ScrollLink>
+
+            <ScrollLink
+              to="about"
+              smooth={true}
+              offset={-80}
+              duration={500}
+              onClick={() => handleNavigation('about')}
+              style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: '1.5rem',
+                fontWeight: 700,
+                padding: '0.4rem',
+                display: 'block',
+                transition: 'opacity 0.3s ease',
+                opacity: hoveredLink !== null ? (hoveredLink === 'about' ? 1 : 0.3) : 1,
+                cursor: 'pointer'
+              }}
+              onMouseEnter={() => setHoveredLink('about')}
+              onMouseLeave={() => setHoveredLink(null)}
+            >
+              About
+            </ScrollLink>
+
+
+            <Link
+              href="/blog"
               style={{
                 color: 'white',
                 textDecoration: 'none',
@@ -186,12 +193,14 @@ export default function Footer() {
               onMouseLeave={() => setHoveredLink(null)}
             >
               Blog
-            </ScrollLink>
+            </Link>
+
             <ScrollLink
-              to="hero"
+              to="contact"
               smooth={true}
               offset={-80}
               duration={500}
+              onClick={() => handleNavigation('contact')}
               style={{
                 color: 'white',
                 textDecoration: 'none',

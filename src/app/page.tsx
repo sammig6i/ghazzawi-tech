@@ -1,10 +1,13 @@
 import Image from 'next/image';
-import { Typography, Container, Box } from "@mui/material";
+import { Typography, Container, Box, Button } from "@mui/material";
 import NavigationButton from '@/app/components/NavigationButton';
 import CaseStudyCard from '@/app/components/CaseStudyCard';
+import ContactForm from '@/app/components/ContactForm';
+import { client } from '../../sanity/lib/client';
+import BlogPreview from '@/app/components/BlogPreview';
 
 
-export default function Home() {
+export default async function Home() {
   const services = [
     {
       title: 'Web Development',
@@ -42,6 +45,24 @@ export default function Home() {
       description: 'Strategic technology guidance & solutions'
     },
   ];
+
+  const posts = await client.fetch(`
+    *[_type == "post"] | order(publishedAt desc) {
+      title,
+      subtitle,
+      "slug": slug.current,
+      mainImage,
+      publishedAt,
+      body,
+      author->{
+        name,
+        image
+      },
+      categories[]->{
+        title
+      }
+    }
+  `, {}, { next: { revalidate: 0 } });
 
   return (
     <>
@@ -259,8 +280,16 @@ export default function Home() {
       <Box id="about" sx={{ py: 8, backgroundColor: '#FFFFFF', scrollMarginTop: '80px' }}>
         <Container maxWidth="lg">
 
-          <Box sx={{ mb: 6 }}>
-            <Box sx={{ display: 'inline-flex', alignItems: 'center', backgroundColor: 'black', borderRadius: '100px', padding: '4px 12px', marginBottom: '16px' }}>
+          {/* Company Introduction */}
+          <Box sx={{ mb: 12 }}>
+            <Box sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              backgroundColor: 'black',
+              borderRadius: '100px',
+              padding: '4px 12px',
+              marginBottom: '16px'
+            }}>
               <Typography
                 variant="overline"
                 sx={{
@@ -270,22 +299,37 @@ export default function Home() {
                   letterSpacing: '0.1em',
                 }}
               >
-                ABOUT OUR TEAM
+                WHO WE ARE
               </Typography>
             </Box>
             <Typography
               variant="h2"
-              component="h2"
               sx={{
                 color: 'black',
-                mb: 4,
+                mb: 6,
                 fontSize: { xs: '2.5rem', md: '3.5rem' },
               }}
             >
-              Meet Our Team
+              About our Company
+            </Typography>
+
+            <Typography
+              variant="h3"
+              sx={{
+                color: 'black',
+                fontSize: { xs: '1.5rem', md: '2rem' },
+                lineHeight: 1.4,
+                maxWidth: '100%',
+                '& .highlight': {
+                  color: '#334466',
+                },
+              }}
+            >
+              We build <span className="highlight">software that matters</span>. Ghazzawi Tech delivers clean, powerful solutions for businesses that need results. No fluff. No jargon. Just <span className="highlight">technology that works</span>. We are focused on one thing: <span className="highlight">turning your digital challenges into victories</span>. Our code runs deep. Our solutions run deeper. From custom software to data engineering, we <span className="highlight">build what others can't</span>. Simple. Direct. Effective.
             </Typography>
           </Box>
 
+          {/* Meet Our Team */}
           <Box sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
@@ -302,6 +346,7 @@ export default function Home() {
                 src="/about-photo.png"
                 alt="Team Member"
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 style={{
                   objectFit: 'cover',
                   objectPosition: 'center',
@@ -364,38 +409,33 @@ export default function Home() {
                 sx={{
                   color: 'black',
                   mb: 3,
-                  fontSize: '1.125rem',
+                  fontSize: '1.25rem',
                   lineHeight: 1.8,
                 }}
               >
-                {/* TODO Edit about paragraph */}
-                Boban, the driving force behind Adverge. With over a decade of experience in digital marketing, Boban's passion for innovation and dedication to client success have been the cornerstone of our agency's growth. His strategic vision and hands-on approach have propelled us to the forefront of the industry, while his commitment to transparency and integrity sets the tone for our team. As a respected leader and mentor, Boban inspires us to exceed expectations and deliver exceptional results for our clients every day.
+                Sammi, the driving force behind Ghazzawi Tech. With a deep understanding of software development and a passion for innovation, Sammi's dedication to client success drives our company's vision. His strategic approach to technology solutions and commitment to excellence sets the foundation for our work. As a hands-on leader, Sammi ensures every project delivers measurable value and exceeds client expectations.
               </Typography>
 
-              {/* TODO Edit skills section */}
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 4 }}>
                 {['Visionary Thinker', 'Empathetic Leader', 'Creative Problem-Solver', 'Passionate Mentor'].map((skill) => (
                   <Box
                     key={skill}
                     sx={{
-                      backgroundColor: 'black',
+                      backgroundColor: '#001233',
                       borderRadius: '8px',
                       padding: '8px 16px',
                       color: 'white',
-                      fontSize: '0.9rem',
+                      fontSize: '1.125rem',
                       display: 'flex',
                       alignItems: 'center',
                       gap: 1,
                     }}
                   >
-                    <Box
-                      component="span"
-                      sx={{
-                        width: '6px',
-                        height: '6px',
-                        backgroundColor: 'white',
-                        borderRadius: '50%',
-                      }}
+                    <Image
+                      src="/icons/skills.svg"
+                      alt="Skills Icon"
+                      width={20}
+                      height={20}
                     />
                     {skill}
                   </Box>
@@ -408,8 +448,143 @@ export default function Home() {
         </Container>
       </Box>
 
-      {/* Blog */}
-      {/* TODO add blog section */}
+
+      {/* Blog Section */}
+      <Box id="blog" sx={{ py: 8, backgroundColor: '#001233' }}>
+        <Container maxWidth="lg">
+          <Box sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            backgroundColor: 'white',
+            borderRadius: '100px',
+            padding: '4px 12px',
+            marginBottom: '16px'
+          }}>
+            <Typography
+              variant="overline"
+              sx={{
+                color: 'black',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                letterSpacing: '0.1em',
+              }}
+            >
+              BLOG
+            </Typography>
+          </Box>
+          <Typography
+            variant="h2"
+            sx={{
+              color: 'white',
+              mb: 4,
+              fontSize: { xs: '2rem', md: '2.5rem' },
+            }}
+          >
+            Latest Posts
+          </Typography>
+
+
+          <BlogPreview posts={posts} />
+        </Container>
+      </Box>
+
+
+
+
+      {/* Contact Form Section */}
+      <Box id="contact" sx={{ py: 8, backgroundColor: '#FFFFFF', scrollMarginTop: '80px' }}>
+        <Container maxWidth="lg">
+          <Box sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            backgroundColor: 'black',
+            borderRadius: '100px',
+            padding: '4px 12px',
+            marginBottom: '16px'
+          }}>
+            <Typography
+              variant="overline"
+              sx={{
+                color: 'white',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                letterSpacing: '0.1em',
+              }}
+            >
+              CONNECT WITH US
+            </Typography>
+          </Box>
+          <Typography
+            variant="h2"
+            sx={{
+              color: 'black',
+              mb: 4,
+              fontSize: { xs: '2rem', md: '2.5rem' },
+            }}
+          >
+            Let's Talk!
+          </Typography>
+
+          <Box sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            gap: { xs: 4, md: 8 },
+            alignItems: { xs: 'flex-start', md: 'flex-start' },
+          }}>
+
+            <ContactForm />
+
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              pt: { xs: 0, md: 4 }
+            }}>
+              <Typography
+                variant="h2"
+                sx={{
+                  color: 'black',
+                  fontSize: { xs: '2rem', md: '2.5rem' },
+                  fontWeight: 700,
+                  mb: 2
+                }}
+              >
+                New Business Inquiries
+              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: 'black',
+                    fontSize: '1.25rem',
+                    fontWeight: 500
+                  }}
+                >
+                  E
+                </Typography>
+                <Typography
+                  component="a"
+                  href="mailto:swghazzawi@gmail.com"
+                  sx={{
+                    color: 'black',
+                    fontSize: '1.25rem',
+                    textDecoration: 'none',
+                    borderBottom: '1px solid #001233',
+                    transition: 'opacity 0.3s ease',
+                    '&:hover': {
+                      opacity: 0.8
+                    }
+                  }}
+                >
+                  swghazzawi@gmail.com
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+
+
 
     </>
   );

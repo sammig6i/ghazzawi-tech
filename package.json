@@ -6,19 +6,32 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "sanity": "cd sanity && sanity dev",
+    "sanity-deploy": "cd sanity && sanity deploy"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@formspree/react": "^2.5.1",
     "@mui/icons-material": "^6.1.3",
     "@mui/material": "^6.1.3",
     "@mui/material-nextjs": "^6.1.3",
+    "@portabletext/react": "^3.1.0",
+    "@sanity/icons": "^3.4.0",
+    "@sanity/image-url": "^1.1.0",
+    "@sanity/vision": "^3.62.3",
     "@types/react-scroll": "^1.8.10",
+    "easymde": "^2.18.0",
     "next": "14.2.15",
+    "next-sanity": "^9.8.8",
     "react": "^18",
     "react-dom": "^18",
-    "react-scroll": "^1.9.0"
+    "react-markdown": "^9.0.1",
+    "react-scroll": "^1.9.0",
+    "sanity": "^3.62.3",
+    "sanity-plugin-markdown": "^5.0.0",
+    "styled-components": "^6.1.13"
   },
   "devDependencies": {
     "@types/node": "^20",
