@@ -6,9 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "sanity": "cd sanity && sanity dev",
-    "sanity-deploy": "cd sanity && sanity deploy"
+    "lint": "next lint"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -17,6 +15,10 @@
     "@mui/icons-material": "^6.1.3",
     "@mui/material": "^6.1.3",
     "@mui/material-nextjs": "^6.1.3",
+    "@notion-render/bookmark-plugin": "^0.0.2",
+    "@notion-render/client": "^0.0.2",
+    "@notion-render/hljs-plugin": "^0.0.2",
+    "@notionhq/client": "^2.2.15",
     "@portabletext/react": "^3.1.0",
     "@sanity/icons": "^3.4.0",
     "@sanity/image-url": "^1.1.0",
@@ -25,12 +27,19 @@
     "easymde": "^2.18.0",
     "next": "14.2.15",
     "next-sanity": "^9.8.8",
+    "notion-to-md": "^3.1.1",
     "react": "^18",
     "react-dom": "^18",
     "react-markdown": "^9.0.1",
     "react-scroll": "^1.9.0",
+    "rehype-stringify": "^10.0.1",
+    "remark": "^15.0.1",
+    "remark-html": "^16.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.1",
     "sanity": "^3.62.3",
     "sanity-plugin-markdown": "^5.0.0",
+    "server-only": "^0.0.1",
     "styled-components": "^6.1.13"
   },
   "devDependencies": {

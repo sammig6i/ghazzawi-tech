@@ -1,62 +1,12 @@
 import Image from 'next/image';
 import { Box, Typography, Avatar } from '@mui/material';
-import { urlFor } from '../../../sanity/lib/image';
 import Link from 'next/link';
-import { SanityImageSource } from '@sanity/image-url/lib/types/types';
-
-interface BlockChild {
-  _type: string;
-  text?: string;
-}
-
-interface BlockContent {
-  _type: string;
-  children?: BlockChild[];
-}
+import { BlogPost } from '@/lib/blogUtils';
 
 interface BlogGridProps {
-  posts: {
-    title: string;
-    subtitle: string;
-    slug: string;
-    mainImage: SanityImageSource;
-    publishedAt: string;
-    body: BlockContent[];
-    author: {
-      name: string;
-      image: SanityImageSource;
-    };
-    categories: {
-      title: string;
-    }[];
-  }[];
+  posts: BlogPost[];
 }
 
-function calculateReadingTime(body: string | BlockContent[]): number {
-  const WORDS_PER_MINUTE = 200;
-
-  // If body is a string (markdown), count words directly
-  if (typeof body === 'string') {
-    const wordCount = body.trim().split(/\s+/).length;
-    return Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
-  }
-
-  // If body is an array (legacy portable text), use the existing logic
-  if (Array.isArray(body)) {
-    const wordCount = body.reduce((count, block) => {
-      if (block._type === 'block') {
-        return count + (block.children?.reduce((acc: number, child: BlockChild) => {
-          return acc + (child.text?.split(/\s+/).length || 0);
-        }, 0) || 0);
-      }
-      return count;
-    }, 0);
-    return Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
-  }
-
-  // Default fallback
-  return 1;
-}
 
 export default function BlogGrid({ posts }: BlogGridProps) {
   return (
@@ -75,7 +25,7 @@ export default function BlogGrid({ posts }: BlogGridProps) {
               borderRadius: '16px',
               overflow: 'hidden',
               backgroundColor: '#ffffff',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)',
               transition: 'transform 0.3s ease',
               height: '100%',
               '&:hover': {
@@ -88,15 +38,13 @@ export default function BlogGrid({ posts }: BlogGridProps) {
               gridTemplateColumns: { xs: '1fr', md: '5fr 7fr' }
             }}>
               <Box sx={{ position: 'relative', height: '300px' }}>
-                {post.mainImage && (
-                  <Image
-                    src={urlFor(post.mainImage).url()}
-                    alt={post.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 40vw"
-                    style={{ objectFit: 'cover' }}
-                  />
-                )}
+                <Image
+                  src={post.mainImage.url}
+                  alt={post.mainImage.alt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                  style={{ objectFit: 'cover' }}
+                />
               </Box>
               <Box sx={{ p: 4 }}>
                 <Typography
@@ -114,7 +62,7 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                 <Typography
                   variant="body1"
                   sx={{
-                    color: 'rgba(0, 0, 0, 0.6)',
+                    color: 'rgba(0, 0, 0, 1.0)',
                     mb: 3,
                     fontSize: '1.1rem',
                     display: '-webkit-box',
@@ -127,13 +75,11 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                   {post.subtitle}
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  {post.author.image && (
-                    <Avatar
-                      sx={{ width: 60, height: 60, mr: 2 }}
-                      src={urlFor(post.author.image).url()}
-                      alt={post.author.name}
-                    />
-                  )}
+                  <Avatar
+                    sx={{ width: 60, height: 60, mr: 2 }}
+                    src={post.author.image.url}
+                    alt={post.author.name}
+                  />
                   <Box>
                     <Typography
                       variant="subtitle1"
@@ -145,19 +91,6 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                       }}
                     >
                       {post.author.name}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        color: 'rgba(0, 0, 0, 0.6)',
-                        fontSize: '1rem'
-                      }}
-                    >
-                      {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })} - {calculateReadingTime(post.body)} min read
                     </Typography>
                   </Box>
                 </Box>

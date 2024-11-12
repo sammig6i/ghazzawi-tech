@@ -4,6 +4,9 @@ import NavigationButton from '@/app/components/NavigationButton';
 import CaseStudyCard from '@/app/components/CaseStudyCard';
 import ContactForm from '@/app/components/ContactForm';
 import BlogPreview from '@/app/components/BlogPreview';
+import { formatBlogPosts } from '@/lib/blogUtils';
+import { fetchPages, notion } from '@/lib/notion';
+import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 
 
 export default async function Home() {
@@ -468,13 +471,11 @@ export default async function Home() {
           >
             Latest Posts
           </Typography>
+
           {/* Blog Posts Preview */}
-
-
+          <BlogPreview posts={await fetchPages().then(response => formatBlogPosts(response.results as PageObjectResponse[]))} />
         </Container>
       </Box>
-
-
 
 
       {/* Contact Form Section */}

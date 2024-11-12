@@ -1,63 +1,10 @@
-import Image from 'next/image';
-import { Box, Typography, Button, Avatar } from '@mui/material';
-import { urlFor } from '../../../sanity/lib/image';
+import { BlogPost } from '@/lib/blogUtils';
+import { Box, Typography, Avatar } from '@mui/material';
 import Link from 'next/link';
-
-interface SanityImage {
-  _type: 'image';
-  asset: {
-    _ref: string;
-    _type: 'reference';
-  };
-}
-
-interface SanityBlock {
-  _type: 'block';
-  children?: {
-    text?: string;
-    _type: string;
-  }[];
-}
+import Image from 'next/image';
 
 interface BlogPreviewProps {
-  posts: {
-    title: string;
-    subtitle: string;
-    slug: string;
-    mainImage: SanityImage;
-    publishedAt: string;
-    body: SanityBlock[];
-    author: {
-      name: string;
-      image: SanityImage;
-    };
-    categories: {
-      title: string;
-    }[];
-  }[];
-}
-
-function calculateReadingTime(body: string | SanityBlock[]): number {
-  const WORDS_PER_MINUTE = 200;
-
-  if (typeof body === 'string') {
-    const wordCount = body.trim().split(/\s+/).length;
-    return Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
-  }
-
-  if (Array.isArray(body)) {
-    const wordCount = body.reduce((count, block) => {
-      if (block._type === 'block') {
-        return count + (block.children?.reduce((acc: number, child) => {
-          return acc + (child.text?.split(/\s+/).length || 0);
-        }, 0) || 0);
-      }
-      return count;
-    }, 0);
-    return Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
-  }
-
-  return 1;
+  posts: BlogPost[];
 }
 
 export default function BlogPreview({ posts }: BlogPreviewProps) {
@@ -75,85 +22,52 @@ export default function BlogPreview({ posts }: BlogPreviewProps) {
         {posts.slice(0, 6).map((post) => (
           <Box key={post.slug}>
             <Link href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
-              <Box
-                sx={{
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  backgroundColor: '#fff',
-                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                  transition: 'transform 0.3s ease',
-                  height: '100%',
-                  '&:hover': {
-                    transform: 'translateY(-4px)',
-                  },
-                }}
-              >
+              <Box sx={{
+                borderRadius: '16px',
+                overflow: 'hidden',
+                backgroundColor: '#fff',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                transition: 'transform 0.3s ease',
+                height: '100%',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                },
+              }}>
                 <Box sx={{ position: 'relative', height: '200px' }}>
-                  {post.mainImage && (
-                    <Image
-                      src={urlFor(post.mainImage).url()}
-                      alt={post.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      style={{ objectFit: 'cover' }}
-                    />
-                  )}
+                  <Image
+                    src={post.mainImage.url}
+                    alt={post.mainImage.alt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    style={{ objectFit: 'cover' }}
+                  />
                 </Box>
                 <Box sx={{ p: 3 }}>
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      fontWeight: 'bold',
-                      color: 'black',
-                      mb: 1,
-                      fontSize: '1.25rem',
-                      lineHeight: 1.4,
-                    }}
-                  >
+                  <Typography variant="h5" sx={{
+                    fontWeight: 'bold',
+                    color: 'black',
+                    mb: 1
+                  }}>
                     {post.title}
                   </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: 'rgba(0, 0, 0, 0.6)',
-                      mb: 3,
-                      fontSize: '1rem',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                    }}
-                  >
+                  <Typography variant="body1" sx={{
+                    color: 'rgba(0, 0, 0, 0.6)',
+                    mb: 3
+                  }}>
                     {post.subtitle}
                   </Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    {post.author.image && (
-                      <Avatar
-                        sx={{ width: 60, height: 60, mr: 2 }}
-                        src={urlFor(post.author.image).url()}
-                        alt={post.author.name}
-                      />
-                    )}
+                    <Avatar
+                      sx={{ width: 40, height: 40, mr: 2 }}
+                      src={post.author.image.url}
+                      alt={post.author.name}
+                    />
                     <Box>
-                      <Typography
-                        variant="subtitle1"
-                        sx={{
-                          fontWeight: 600,
-                          color: 'black',
-                          fontSize: '1.125rem',
-                        }}
-                      >
+                      <Typography variant="subtitle1" sx={{ fontWeight: 600, color: 'black' }}>
                         {post.author.name}
                       </Typography>
-                      <Typography
-                        variant="caption"
-                        sx={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: '1rem' }}
-                      >
-                        {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                          month: 'long',
-                          day: 'numeric',
-                          year: 'numeric'
-                        })} - {calculateReadingTime(post.body)} min read
+                      <Typography variant="caption" sx={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+                        {new Date(post.publishedAt).toLocaleDateString()}
                       </Typography>
                     </Box>
                   </Box>
@@ -162,25 +76,6 @@ export default function BlogPreview({ posts }: BlogPreviewProps) {
             </Link>
           </Box>
         ))}
-      </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-        <Link href="/blog" passHref>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: 'white',
-              color: 'black',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                color: '#001233',
-              },
-            }}
-          >
-            See More Posts
-          </Button>
-        </Link>
       </Box>
     </Box>
   );
