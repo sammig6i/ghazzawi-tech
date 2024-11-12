@@ -5,8 +5,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import './notion.css';
 import { formatBlogPosts } from '@/lib/blogUtils';
 
-// Add syntax highlighting to code blocks and add Tags to posts
-
+// TODO Add syntax highlighting to code blocks and add Tags to posts
 export const revalidate = 0;
 
 export default async function BlogPost({ params }: { params: { slug: string } }) {
