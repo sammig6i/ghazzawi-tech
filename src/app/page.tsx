@@ -3,7 +3,6 @@ import { Typography, Container, Box } from "@mui/material";
 import NavigationButton from '@/app/components/NavigationButton';
 import CaseStudyCard from '@/app/components/CaseStudyCard';
 import ContactForm from '@/app/components/ContactForm';
-import { client } from '../../sanity/lib/client';
 import BlogPreview from '@/app/components/BlogPreview';
 
 
@@ -46,23 +45,7 @@ export default async function Home() {
     },
   ];
 
-  const posts = await client.fetch(`
-    *[_type == "post"] | order(publishedAt desc) {
-      title,
-      subtitle,
-      "slug": slug.current,
-      mainImage,
-      publishedAt,
-      body,
-      author->{
-        name,
-        image
-      },
-      categories[]->{
-        title
-      }
-    }
-  `, {}, { next: { revalidate: 0 } });
+
 
   return (
     <>
@@ -485,9 +468,9 @@ export default async function Home() {
           >
             Latest Posts
           </Typography>
+          {/* Blog Posts Preview */}
 
 
-          <BlogPreview posts={posts} />
         </Container>
       </Box>
 
