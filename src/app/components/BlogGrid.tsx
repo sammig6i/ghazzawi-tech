@@ -92,6 +92,9 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                     >
                       {post.author.name}
                     </Typography>
+                    <Typography variant="caption" sx={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+                      {new Date(post.publishedAt).toLocaleDateString()}
+                    </Typography>
                   </Box>
                 </Box>
               </Box>
