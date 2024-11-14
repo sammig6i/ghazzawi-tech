@@ -1,4 +1,4 @@
-import { fetchBySlug, fetchPageBlocks, getMarkdownFromBlocks } from '@/lib/notion';
+import { fetchBySlug, fetchPageBlocks, getMarkdownFromBlocks, REVALIDATE_TIME } from '@/lib/notion';
 import { Box, Container, Typography, Button, Avatar } from '@mui/material';
 import Link from 'next/link';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -7,6 +7,8 @@ import { formatBlogPosts } from '@/lib/blogUtils';
 
 // TODO make blog revalidate based on Notion Database
 // TODO Add syntax highlighting to code blocks and add Tags to posts
+
+export const revalidate = REVALIDATE_TIME;
 
 export default async function BlogPost({ params }: { params: { slug: string } }) {
   const post = await fetchBySlug(params.slug);

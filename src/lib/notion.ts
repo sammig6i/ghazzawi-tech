@@ -22,8 +22,10 @@ const n2m = new NotionToMarkdown({
   },
 });
 
+export const REVALIDATE_TIME = 3600;
+
 export const fetchPages = React.cache(async () => {
-  return notion.databases.query({
+  const response = await notion.databases.query({
     database_id: process.env.NOTION_DATABASE_ID!,
     filter: {
       property: "Status",
@@ -32,18 +34,18 @@ export const fetchPages = React.cache(async () => {
       },
     },
   });
+  return response;
 });
 
 export const fetchBySlug = React.cache(async (slug: string) => {
-  return notion.databases
-    .query({
-      database_id: process.env.NOTION_DATABASE_ID!,
-      filter: {
-        property: "Slug",
-        rich_text: { equals: slug },
-      },
-    })
-    .then((res) => res.results[0] as PageObjectResponse | undefined);
+  const response = await notion.databases.query({
+    database_id: process.env.NOTION_DATABASE_ID!,
+    filter: {
+      property: "Slug",
+      rich_text: { equals: slug },
+    },
+  });
+  return response.results[0] as PageObjectResponse | undefined;
 });
 
 export const fetchPageBlocks = React.cache(async (pageId: string) => {

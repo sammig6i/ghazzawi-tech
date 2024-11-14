@@ -1,8 +1,10 @@
 import { Box, Container, Typography } from '@mui/material';
 import BlogGrid from '@/app/components/BlogGrid';
-import { fetchPages } from '@/lib/notion';
+import { fetchPages, REVALIDATE_TIME } from '@/lib/notion';
 import { formatBlogPosts } from '@/lib/blogUtils';
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+
+export const revalidate = REVALIDATE_TIME;
 
 export default async function BlogPage() {
   const posts = await fetchPages().then(response =>
