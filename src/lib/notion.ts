@@ -22,7 +22,7 @@ const n2m = new NotionToMarkdown({
   },
 });
 
-export const fetchPages = React.cache(() => {
+export const fetchPages = React.cache(async () => {
   return notion.databases.query({
     database_id: process.env.NOTION_DATABASE_ID!,
     filter: {
@@ -54,15 +54,12 @@ export const fetchPageBlocks = React.cache(async (pageId: string) => {
 });
 
 export async function getMarkdownFromBlocks(blocks: BlockObjectResponse[]) {
-  // Convert blocks to markdown
   const mdblocks = await n2m.blocksToMarkdown(blocks);
   const mdString = n2m.toMarkdownString(mdblocks);
 
-  // Make sure we're accessing the markdown string correctly
   const markdownContent =
     typeof mdString === "string" ? mdString : mdString.parent;
 
-  // Convert markdown to HTML
   const processedContent = await unified()
     .use(remarkParse)
     .use(remarkRehype, { allowDangerousHtml: true })
