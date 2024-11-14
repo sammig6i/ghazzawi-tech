@@ -40,6 +40,18 @@ export async function formatBlogPosts(
 ): Promise<BlogPost[]> {
   return pages.map((page) => {
     const properties = page.properties;
+    const publishedDate = (
+      page.properties.Published as { type: "date"; date: { start: string } }
+    ).date.start;
+
+    const formattedDate = new Date(
+      publishedDate + "T00:00:00Z"
+    ).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: "UTC",
+    });
 
     return {
       title: (properties.Title as any)?.title?.[0]?.plain_text || "",
@@ -53,7 +65,7 @@ export async function formatBlogPosts(
           "",
         alt: (properties.Title as any)?.title?.[0]?.plain_text || "",
       },
-      publishedAt: (properties.Published as any)?.date?.start || "",
+      publishedAt: formattedDate,
       body: [],
       author: (properties.Author as any)?.people?.[0]
         ? {

@@ -21,14 +21,15 @@ export default async function BlogPost({ params }: { params: { slug: string } })
 
   const title = (post.properties.Title as { type: 'title', title: Array<{ plain_text: string }> }).title[0].plain_text;
   const publishedAt = (post.properties.Published as { type: 'date', date: { start: string } }).date.start;
-  const formattedDate = new Date(publishedAt).toLocaleDateString('en-US', {
+  const formattedDate = new Date(publishedAt + 'T00:00:00Z').toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: 'UTC'
   });
 
   return (
-    <Container maxWidth="lg" sx={{ py: 15, backgroundColor: 'white' }}>
+    <Container sx={{ py: 15, backgroundColor: 'white' }}>
       <Box sx={{ mb: 6, pr: 5, pl: 5 }}>
         <Typography variant="h2" sx={{ mb: 4, color: 'black' }}>
           {title}

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Typography, Container, Box } from "@mui/material";
+import { Typography, Container, Box, Button } from "@mui/material";
 import NavigationButton from '@/app/components/NavigationButton';
 import CaseStudyCard from '@/app/components/CaseStudyCard';
 import ContactForm from '@/app/components/ContactForm';
@@ -7,6 +7,7 @@ import BlogPreview from '@/app/components/BlogPreview';
 import { formatBlogPosts } from '@/lib/blogUtils';
 import { fetchPages, notion } from '@/lib/notion';
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import Link from 'next/link';
 
 
 export default async function Home() {
@@ -474,6 +475,27 @@ export default async function Home() {
 
           {/* Blog Posts Preview */}
           <BlogPreview posts={await fetchPages().then(response => formatBlogPosts(response.results as PageObjectResponse[]))} />
+
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+            <Link href="/blog" style={{ textDecoration: 'none' }}>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: 'white',
+                  color: 'black',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  },
+                  px: 4,
+                  py: 1.5,
+                  borderRadius: '8px',
+                  fontWeight: 600
+                }}
+              >
+                See More Posts
+              </Button>
+            </Link>
+          </Box>
         </Container>
       </Box>
 

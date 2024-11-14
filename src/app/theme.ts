@@ -21,7 +21,7 @@ const theme = createTheme({
       main: colors.blue[500],
     },
     background: {
-      default: colors.slate[900],
+      default: colors.white,
       paper: colors.slate[800],
     },
     text: {
