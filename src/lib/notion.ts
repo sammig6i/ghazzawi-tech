@@ -1,6 +1,6 @@
 import "server-only";
 import { Client } from "@notionhq/client";
-import React from "react";
+import { cache } from "react";
 import {
   BlockObjectResponse,
   PageObjectResponse,
@@ -9,9 +9,15 @@ import { NotionToMarkdown } from "notion-to-md";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
+import rehypeHighlight from "rehype-highlight";
+import rehypeSanitize from "rehype-sanitize";
+import rehypeRaw from "rehype-raw";
+import remarkFrontmatter from "remark-frontmatter";
+import remarkParseFrontmatter from "remark-parse-frontmatter";
+
 import { unified } from "unified";
 
-export const REVALIDATE_TIME = 60;
+export const REVALIDATE_TIME = 3600;
 
 export const notion = new Client({
   auth: process.env.NOTION_TOKEN,
@@ -24,7 +30,7 @@ const n2m = new NotionToMarkdown({
   },
 });
 
-export const fetchPages = React.cache(async () => {
+export const fetchPages = cache(async () => {
   const response = await notion.databases.query({
     database_id: process.env.NOTION_DATABASE_ID!,
     filter: {
@@ -37,7 +43,7 @@ export const fetchPages = React.cache(async () => {
   return response;
 });
 
-export const fetchBySlug = React.cache(async (slug: string) => {
+export const fetchBySlug = cache(async (slug: string) => {
   const response = await notion.databases.query({
     database_id: process.env.NOTION_DATABASE_ID!,
     filter: {
@@ -48,7 +54,7 @@ export const fetchBySlug = React.cache(async (slug: string) => {
   return response.results[0] as PageObjectResponse | undefined;
 });
 
-export const fetchPageBlocks = React.cache(async (pageId: string) => {
+export const fetchPageBlocks = cache(async (pageId: string) => {
   const res = await notion.blocks.children.list({
     block_id: pageId,
   });
@@ -64,9 +70,13 @@ export async function getMarkdownFromBlocks(blocks: BlockObjectResponse[]) {
 
   const processedContent = await unified()
     .use(remarkParse)
+    .use(remarkFrontmatter, ["yaml"])
+    .use(remarkParseFrontmatter)
     .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeRaw)
+    .use(rehypeHighlight)
     .use(rehypeStringify)
     .process(markdownContent);
 
-  return processedContent.toString();
+  return String(processedContent);
 }

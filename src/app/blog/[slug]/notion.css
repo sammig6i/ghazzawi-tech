@@ -29,20 +29,11 @@
   margin: 1em 0;
 }
 
-.notion-content pre {
-  background: #1e1e1e;
-  padding: 1em;
-  border-radius: 4px;
-  overflow-x: auto;
-  color: #d4d4d4;
-}
-
 .notion-content code {
   padding: 0.2em 0.4em;
   border-radius: 3px;
   font-family: monospace;
   font-size: 0.9em;
-  color: #d4d4d4;
 }
 
 .notion-content blockquote {

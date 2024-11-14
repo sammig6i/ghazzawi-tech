@@ -3,10 +3,11 @@ import { Box, Container, Typography, Button, Avatar } from '@mui/material';
 import Link from 'next/link';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import './notion.css';
+import './highlight.css';
 import { formatBlogPosts } from '@/lib/blogUtils';
 
-// TODO make blog revalidate based on Notion Database
-// TODO Add syntax highlighting to code blocks and add Tags to posts
+//  TODO add category Tags to posts
+// TODO Add webhooks for Notion blog posts
 
 export const revalidate = REVALIDATE_TIME
 

@@ -5,7 +5,7 @@ import CaseStudyCard from '@/app/components/CaseStudyCard';
 import ContactForm from '@/app/components/ContactForm';
 import BlogPreview from '@/app/components/BlogPreview';
 import { formatBlogPosts } from '@/lib/blogUtils';
-import { fetchPages, notion, REVALIDATE_TIME } from '@/lib/notion';
+import { fetchPages, REVALIDATE_TIME } from '@/lib/notion';
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import Link from 'next/link';
 
