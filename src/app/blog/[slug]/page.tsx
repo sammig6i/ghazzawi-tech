@@ -8,7 +8,7 @@ import { formatBlogPosts } from '@/lib/blogUtils';
 // TODO make blog revalidate based on Notion Database
 // TODO Add syntax highlighting to code blocks and add Tags to posts
 
-export const revalidate = REVALIDATE_TIME;
+export const revalidate = REVALIDATE_TIME
 
 export default async function BlogPost({ params }: { params: { slug: string } }) {
   const post = await fetchBySlug(params.slug);

@@ -11,6 +11,8 @@ import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import { unified } from "unified";
 
+export const REVALIDATE_TIME = 60;
+
 export const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
@@ -21,8 +23,6 @@ const n2m = new NotionToMarkdown({
     parseChildPages: false,
   },
 });
-
-export const REVALIDATE_TIME = 3600;
 
 export const fetchPages = React.cache(async () => {
   const response = await notion.databases.query({

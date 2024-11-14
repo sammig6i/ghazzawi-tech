@@ -5,10 +5,11 @@ import CaseStudyCard from '@/app/components/CaseStudyCard';
 import ContactForm from '@/app/components/ContactForm';
 import BlogPreview from '@/app/components/BlogPreview';
 import { formatBlogPosts } from '@/lib/blogUtils';
-import { fetchPages, notion } from '@/lib/notion';
+import { fetchPages, notion, REVALIDATE_TIME } from '@/lib/notion';
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import Link from 'next/link';
 
+export const revalidate = REVALIDATE_TIME;
 
 export default async function Home() {
   const services = [
